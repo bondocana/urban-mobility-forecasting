@@ -17,18 +17,12 @@ env/
 # Data and generated artifacts
 data/raw/*
 data/processed/*
+data/csv_visualization/*
 models/*
 reports/*.pdf
 reports/*.html
 streaming/input/*
 streaming/checkpoints/*
-
-# Keep folder placeholders
-!data/raw/.gitkeep
-!data/processed/.gitkeep
-!models/.gitkeep
-!streaming/input/.gitkeep
-!streaming/checkpoints/.gitkeep
 
 # Local config
 .env
