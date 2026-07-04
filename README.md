@@ -12,7 +12,7 @@ Dataset source: https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
 
 The dataset includes operational and financial information about taxi rides, such as pickup and drop-off timestamps, trip distance, passenger count, fare amount, payment type, taxes, tips, tolls, and total trip cost. These fields make the dataset suitable for large-scale mobility analysis, distributed data processing, and predictive modeling.
 
-For local development, the project will use a limited time window from the Yellow Taxi trip records, such as one or two months of data. This keeps the project practical to run locally while still preserving the characteristics of a Big Data workflow: large files, structured records, distributed processing, aggregations, machine learning, and streaming-style inference.
+The project uses a large-scale taxi trip dataset as the main input, built from multiple monthly Yellow Taxi trip record files, ideally covering a full year of trips. The main Spark processing, SQL analysis, aggregations, and machine learning workflow are intended to run on this large dataset, not only on a small sample. Smaller samples may be used only for quick local prototyping or debugging, while the final analysis should demonstrate processing over the larger multi-file dataset.
 
 ### Project Context
 
