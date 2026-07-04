@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 from pathlib import Path
@@ -8,6 +9,7 @@ from pyspark.ml.feature import StringIndexer, VectorAssembler
 from pyspark.ml.regression import LinearRegression
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
+from pyspark.storagelevel import StorageLevel
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +22,23 @@ os.environ.setdefault("JAVA_HOME", JAVA_HOME)
 os.environ["PATH"] = f"{JAVA_HOME}\\bin;{os.environ['PATH']}"
 
 RANDOM_SEED = 42
-SAMPLE_FRACTION = 0.03
+DEFAULT_SAMPLE_FRACTION = 0.03
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Run Spark MLlib models for the taxi project.")
+    parser.add_argument(
+        "--sample-fraction",
+        type=float,
+        default=DEFAULT_SAMPLE_FRACTION,
+        help="Fraction of processed rows used for training and evaluation.",
+    )
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        help="Use the full processed dataset instead of a sample.",
+    )
+    return parser.parse_args()
 
 
 def show_title(title: str) -> None:
@@ -30,6 +48,9 @@ def show_title(title: str) -> None:
 
 
 def main() -> None:
+    args = parse_args()
+    sample_fraction = 1.0 if args.full else args.sample_fraction
+
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
     spark = (
@@ -47,7 +68,7 @@ def main() -> None:
         total_rows = clean_df.count()
         print(f"Processed rows: {total_rows:,}")
 
-        model_df = (
+        selected_df = (
             clean_df
             .select(
                 "passenger_count",
@@ -64,11 +85,23 @@ def main() -> None:
                 "trip_distance_bucket",
             )
             .dropna()
-            .sample(withReplacement=False, fraction=SAMPLE_FRACTION, seed=RANDOM_SEED)
-            .cache()
         )
+
+        if sample_fraction < 1.0:
+            model_df = selected_df.sample(
+                withReplacement=False,
+                fraction=sample_fraction,
+                seed=RANDOM_SEED,
+            )
+        else:
+            model_df = selected_df
+
+        model_df = model_df.persist(StorageLevel.DISK_ONLY)
         sample_count = model_df.count()
-        print(f"Sample rows used for MLlib: {sample_count:,}")
+        if sample_fraction < 1.0:
+            print(f"Sample rows used for MLlib: {sample_count:,}")
+        else:
+            print(f"Full rows used for MLlib: {sample_count:,}")
 
         show_title("Method 1 - Linear Regression for fare prediction")
         regression_features = [
@@ -204,7 +237,7 @@ def main() -> None:
 
         metrics = {
             "input_rows": total_rows,
-            "sample_fraction": SAMPLE_FRACTION,
+            "sample_fraction": sample_fraction,
             "sample_rows": sample_count,
             "linear_regression": {
                 "target": "fare_amount",

@@ -91,9 +91,13 @@ def clean_batch(batch: pa.RecordBatch) -> pa.Table:
     mask = and_mask(mask, pc.greater_equal(table["passenger_count"], 1))
     mask = and_mask(mask, pc.less_equal(table["passenger_count"], 6))
     mask = and_mask(mask, pc.greater(table["fare_amount"], 0))
+    mask = and_mask(mask, pc.less_equal(table["fare_amount"], 500))
     mask = and_mask(mask, pc.greater(table["total_amount"], 0))
+    mask = and_mask(mask, pc.less_equal(table["total_amount"], 1000))
     mask = and_mask(mask, pc.greater_equal(table["average_speed_mph"], 1))
     mask = and_mask(mask, pc.less_equal(table["average_speed_mph"], 100))
+    mask = and_mask(mask, pc.greater_equal(table["fare_per_mile"], 1))
+    mask = and_mask(mask, pc.less_equal(table["fare_per_mile"], 100))
 
     return table.filter(mask)
 

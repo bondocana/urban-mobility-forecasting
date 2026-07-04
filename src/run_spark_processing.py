@@ -130,8 +130,11 @@ def main() -> None:
             .filter(F.col("trip_distance") <= 100)
             .filter(F.col("passenger_count").between(1, 6))
             .filter(F.col("fare_amount") > 0)
+            .filter(F.col("fare_amount") <= 500)
             .filter(F.col("total_amount") > 0)
+            .filter(F.col("total_amount") <= 1000)
             .filter(F.col("average_speed_mph").between(1, 100))
+            .filter(F.col("fare_per_mile").between(1, 100))
             .withColumn(
                 "trip_distance_bucket",
                 F.when(F.col("trip_distance") < 2, "short")
