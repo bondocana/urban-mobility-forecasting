@@ -1,8 +1,8 @@
 # Urban Mobility Forecasting
 
-End-to-end Big Data project for analyzing NYC Yellow Taxi trip records from 2025.
+Big Data project using NYC Yellow Taxi trip records from 2025.
 
-The project covers Spark processing, Spark SQL analysis, MLlib models, Spark ML pipelines, hyperparameter tuning, TensorFlow modeling, and streaming-style micro-batch analytics.
+The repository contains the notebook and scripts I used for Spark processing, Spark SQL analysis, MLlib models, Spark ML pipelines, hyperparameter tuning, TensorFlow modeling, and a Spark micro-batch streaming simulation.
 
 Main notebook:
 
@@ -12,4 +12,4 @@ Dataset source:
 
 `https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page`
 
-Large data files and generated artifacts are kept locally and are not committed to GitHub.
+Large raw and processed data files are kept locally and are not committed to GitHub.

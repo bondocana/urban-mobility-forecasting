@@ -1,1 +1,1 @@
-"""Reusable helpers for the urban mobility forecasting project."""
+"""Utility scripts for the urban mobility forecasting project."""
