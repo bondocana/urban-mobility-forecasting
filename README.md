@@ -1,9 +1,15 @@
 # Urban Mobility Forecasting
 
-End-to-end data engineering and machine learning project for analyzing large-scale NYC taxi trip data.
+End-to-end Big Data project for analyzing NYC Yellow Taxi trip records from 2025.
 
-The main work will be developed in:
+The project covers Spark processing, Spark SQL analysis, MLlib models, Spark ML pipelines, hyperparameter tuning, TensorFlow modeling, and streaming-style micro-batch analytics.
+
+Main notebook:
 
 `notebooks/urban_mobility_forecasting.ipynb`
 
-Documentation and final explanations will be added after the implementation is complete.
+Dataset source:
+
+`https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page`
+
+Large data files and generated artifacts are kept locally and are not committed to GitHub.
